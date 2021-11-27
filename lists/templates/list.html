@@ -4,7 +4,7 @@
     </head>
     <body>
     <h1>Your To-Do list</h1>
-    <form method="POST" action="/">
+    <form method="POST" action="/list/new">
         <!--默认情况下浏览器把 POST 数据发回表单当前所在的 URL-->
         <input name="item_text" id = "id_new_item" placeholder="Enter a to-do item"/>
         {% csrf_token %}
@@ -15,5 +15,6 @@
             <tr><td>{{ forloop.counter }}: {{ item.text }}</td></tr>
         {% endfor %}
     </table>
+    
 </body>
 </html>

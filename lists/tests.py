@@ -36,22 +36,12 @@ class HomePageTest(TestCase):
         response =self.client.get('/')
         self.assertTemplateUsed(response, 'home.html')
 
-    def test_can_save_a_POST_request(self):
-        # 修改针对保存 POST 请求数据的单元测试不让它渲染包含待办事项的响应而是重定向到首页
-        self.client.post('/',data={'item_text':'A new list item'})
-        self.assertEqual(Item.objects.count(), 1)
-        new_item = Item.objects.first()
-        self.assertEqual(new_item.text, 'A new list item')
 
-    # 保持最小测试单元
-    def test_redirects_after_POST(self):
-        response =self.client.post('/',data={'item_text':'A new list item'}) 
-        self.assertEqual(response.status_code, 302)
-        self.assertEqual(response['location'], '/lists/the-only-list-in-the-world/')
-
+    """7.8.3删除多余测试
     def test_only_saves_items_when_necessary(self):
         self.client.get('/')
         self.assertEqual(Item.objects.count(), 0)
+    """
     """Noused
     def test_displays_all_list_items(self):
         Item.objects.create(text = 'itemey 1')
@@ -100,6 +90,23 @@ class LiveViewTest(TestCase):
         self.assertContains(response, 'itemey 1')
         self.assertContains(response, 'itemey 2')
 
+class NewListTest(TestCase):
 
+    def test_can_save_a_POST_request(self):
+        # 修改针对保存 POST 请求数据的单元测试不让它渲染包含待办事项的响应而是重定向到首页
+        self.client.post('/lists/new',data={'item_text':'A new list item'})
+        self.assertEqual(Item.objects.count(), 1)
+        new_item = Item.objects.first()
+        self.assertEqual(new_item.text, 'A new list item')
 
+    # 保持最小测试单元
+    """
+    def test_redirects_after_POST(self):
+        response =self.client.post('/lists/new',data={'item_text':'A new list item'}) 
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response['location'], '/lists/the-only-list-in-the-world/')
+    """
+    def test_redirects_after_POST(self):
+        response = self.client.post('/lists/new', data={'item_text': 'A new list item'})
+        self.assertRedirects(response, '/lists/the-only-list-in-the-world/')
 
