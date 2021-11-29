@@ -12,23 +12,16 @@ Class-based views
 Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
+
+superlists/urls.py 的真正作用是定义整个网站使用的 URL。如果某些 URL 只在 lists 应用中使用Django 建议使用单独的文件 lists/urls.py让应用自成一体
 """
 from django.contrib import admin
-from django.urls import path,re_path,include
-from lists import views as list_views
-from lists import urls as list_urls
+from django.urls import path,re_path
+from lists import views
 
 urlpatterns = [
-    path('', list_views.home_page, name='home'),
-    path('lists/', include(list_urls)),
-]
-"""
-urlpatterns = [
-    path('', views.home_page, name='home'),
-    # path('lists/new/', views.new_list, name='new_list'),
-    re_path(r'^lists/new$', views.new_list, name='new_list'),
-    re_path(r'^lists/(\d+)/$', views.view_list, name='view_list'),
-    re_path(r'^lists/(\d+)/add_item$', views.add_item, name='add_item'),
+    path('new', views.new_list),
+    path('<list_id>/', views.view_list),
+    path('<list_id>/add_item', views.add_item),
     #path('admin/', admin.site.urls),
 ]
-"""

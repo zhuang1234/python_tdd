@@ -4,17 +4,17 @@
     </head>
     <body>
     <h1>Your To-Do list</h1>
-    <form method="POST" action="/list/new">
+    <form method="POST" action="/lists/{{ list.id }}/add_item">
         <!--默认情况下浏览器把 POST 数据发回表单当前所在的 URL-->
         <input name="item_text" id = "id_new_item" placeholder="Enter a to-do item"/>
         {% csrf_token %}
+
     </form>
-    
+    <!-- .item_set 叫作反向查询reverse lookup是 Django 提供的非常有用的 ORM 功能作用是在其他表中查询某个对象的相关记录。-->
     <table id = "id_list_table">
-        {% for item in items %}
+        {% for item in list.item_set.all %}
             <tr><td>{{ forloop.counter }}: {{ item.text }}</td></tr>
         {% endfor %}
     </table>
-    
 </body>
 </html>
