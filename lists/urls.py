@@ -15,7 +15,7 @@ Including another URLconf
 
 superlists/urls.py 的真正作用是定义整个网站使用的 URL。如果某些 URL 只在 lists 应用中使用Django 建议使用单独的文件 lists/urls.py让应用自成一体
 """
-from django.contrib import admin
+
 from django.urls import path,re_path
 from lists import views
 
