@@ -1,6 +1,10 @@
 from django.db import models
 
 # Create your models here.
+# 在Django 3.2中开始新项目时，主键的默认类型设置为BigAutoField，这是一个64位整数（64 bit integer）。
+# 但是，早期版本将隐式主键的类型设置为整数（integer）。
+# 这意味着当您升级到3.2版本时，您将开始看到有关您没有显式定义的主键类型的警告。
+# 满足Django对显式设置主键类型的要求很容易，但您还需要选择是否要将主键字段类型从整数升级到64位整数。
 
 class List(models.Model):
     pass

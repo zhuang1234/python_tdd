@@ -3,7 +3,7 @@ from django.urls import resolve
 from django.http import HttpRequest, response
 from django.template.loader import render_to_string
 from lists.models import Item,List
-
+from django.core.exceptions import ValidationError
 from lists.views import home_page, new_list
 
 
@@ -35,3 +35,13 @@ class ListAndItemModelsTest(TestCase):
         self.assertEqual(first_saved_item.list, list_)
         self.assertEqual(second_saved_item.text, 'Item the second')
         self.assertEqual(second_saved_item.list, list_)
+
+    def test_cannot_save_empty_list_items(self):
+        list_ = List.objects.create()
+        item = Item(list=list_, text='')
+        with self.assertRaises(ValidationError):
+            item.save()
+            ## 保存数据时 Django 的模型不会运行全部验证
+            ## Django 提供了一个方法用于运行全部验证即 full_clean
+            item.full_clean()
+
