@@ -22,6 +22,6 @@ from lists import views
 urlpatterns = [
     path('new', views.new_list),
     path('<list_id>/', views.view_list),
-    path('<list_id>/add_item', views.add_item),
+    # path('<list_id>/add_item', views.add_item),
     #path('admin/', admin.site.urls),
 ]
