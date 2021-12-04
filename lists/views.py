@@ -31,7 +31,8 @@ def view_list(request, list_id):
             item.full_clean()
             # print(f"item.text == {item.text}")
             # item.save()
-            return redirect(f'/lists/{list_.id}/')
+            # return redirect(f'/lists/{list_.id}/')
+            return redirect(list_)
         except ValidationError:
             print(f"item.text == 1111")
             ## full_clean 只是在验证，并没有删除节点
@@ -50,5 +51,8 @@ def new_list(request):
         list_.delete()
         error = "You can't have an empty list item"
         return render(request, 'home.html', {"error": error})
-    return redirect(f'/lists/{list_.id}/')
+    # return redirect(f'/lists/{list_.id}/')
+    # return redirect('view_list', list_.id)
+    ## 只需把重定向的目标对象传给redirect函数即可redirect函数会自动调用get_absolute_url函数
+    return redirect(list_)
 

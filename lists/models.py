@@ -5,9 +5,12 @@ from django.db import models
 # 但是，早期版本将隐式主键的类型设置为整数（integer）。
 # 这意味着当您升级到3.2版本时，您将开始看到有关您没有显式定义的主键类型的警告。
 # 满足Django对显式设置主键类型的要求很容易，但您还需要选择是否要将主键字段类型从整数升级到64位整数。
+from django.urls import reverse
+
 
 class List(models.Model):
-    pass
+    def get_absolute_url(self):
+        return reverse('view_list', args=[self.id])
 
 
 ## 若想保存对象之间的关系要告诉 Django 两个类之间的关系这种关系使用 ForeignKey 字段表示
