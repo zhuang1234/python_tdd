@@ -39,6 +39,7 @@ class ListAndItemModelsTest(TestCase):
     def test_cannot_save_empty_list_items(self):
         list_ = List.objects.create()
         item = Item(list=list_, text='')
+        # self.assertRaises 上下文管理器
         with self.assertRaises(ValidationError):
             item.save()
             ## 保存数据时 Django 的模型不会运行全部验证

@@ -18,14 +18,27 @@ def home_page(request):
 
 def view_list(request, list_id):
     list_ = List.objects.get(id = list_id)
+    error = None
     """7.12.4
     items = Item.objects.filter(list = list_)
     return render(request, 'list.html', {'items': items})
     """
     if request.method == 'POST':
-        Item.objects.create(text=request.POST['item_text'], list=list_)
-        return redirect(f'/lists/{list_.id}/')
-    return render(request, 'list.html', {'list': list_})
+        try:
+            item = Item.objects.create(text=request.POST['item_text'], list=list_)
+            # print(f"item.text == {item.text}")
+            # print(List.objects.count(),Item.objects.count())
+            item.full_clean()
+            # print(f"item.text == {item.text}")
+            # item.save()
+            return redirect(f'/lists/{list_.id}/')
+        except ValidationError:
+            print(f"item.text == 1111")
+            ## full_clean 只是在验证，并没有删除节点
+            item.delete()
+            print(List.objects.count(), Item.objects.count())
+            error = "You can't have an empty list item"
+    return render(request, 'list.html', {'list': list_,'error': error})
 
 def new_list(request):
     list_ = List.objects.create()

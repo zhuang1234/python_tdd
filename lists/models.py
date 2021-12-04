@@ -13,7 +13,7 @@ class List(models.Model):
 ## 若想保存对象之间的关系要告诉 Django 两个类之间的关系这种关系使用 ForeignKey 字段表示
 class Item(models.Model):
     text = models.TextField(default='')
-    list = models.ForeignKey(List, default='', on_delete=models.CASCADE)
+    list = models.ForeignKey(List, default=None, on_delete=models.CASCADE)
 
     """django 升级到2.0之后,表与表之间关联的时候,必须要写on_delete参数,否则会报异常
         on_delete=None,               # 删除关联表中的数据时,当前表与其关联的field的行为
