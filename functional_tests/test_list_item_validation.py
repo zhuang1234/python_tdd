@@ -19,7 +19,7 @@ class ItemValidationTest(FunctionalTest):
         # 输入框中没输入内容她就按下了回车键
         self.browser.get(self.live_server_url)
         self.get_item_input_box().send_keys(Keys.ENTER)
-
+        """
         # 首页刷新了显示一个错误消息
         # 提示待办事项不能为空
         self.wait_for(lambda: self.assertEqual(
@@ -39,6 +39,43 @@ class ItemValidationTest(FunctionalTest):
         ))
         # 输入文字之后就没问题了
         self.get_item_input_box().send_keys('Make tea')
+        self.get_item_input_box().send_keys(Keys.ENTER)
+        self.wait_for_row_in_list_table('1: Buy milk')
+        self.wait_for_row_in_list_table('2: Make tea')
+        """
+        # 浏览器截获了请求
+        # 清单页面不会加载
+        ## 不再检查我们自定义的错误消息而是通过 CSS 伪选择符 :invalid 检查。这个伪选择符是浏览器为输入无效内容的 HTML5 输入框添加的。
+        self.wait_for(lambda: self.browser.find_elements_by_css_selector(
+            '#id_text:invalid'
+        ))
+
+        # 她在待办事项中输入了一些文字
+        # 错误消失了
+        ## 输入有效的内容时伪选择符逆转
+        self.get_item_input_box().send_keys('Buy milk')
+        self.wait_for(lambda: self.browser.find_elements_by_css_selector(
+            '#id_text:valid'
+        ))
+
+        # 现在能提交了
+        self.get_item_input_box().send_keys(Keys.ENTER)
+        self.wait_for_row_in_list_table('1: Buy milk')
+
+        # 她有点儿调皮打算再提交一个空待办事项
+        self.get_item_input_box().send_keys(Keys.ENTER)
+
+        # 浏览器这次也不会放行
+        self.wait_for_row_in_list_table('1: Buy milk')
+        self.wait_for(lambda: self.browser.find_elements_by_css_selector(
+            '#id_text:invalid'
+        ))
+
+        # 输入一些文字后就能纠正这个错误
+        self.get_item_input_box().send_keys('Make tea')
+        self.wait_for(lambda: self.browser.find_elements_by_css_selector(
+            '#id_text:valid'
+        ))
         self.get_item_input_box().send_keys(Keys.ENTER)
         self.wait_for_row_in_list_table('1: Buy milk')
         self.wait_for_row_in_list_table('2: Make tea')

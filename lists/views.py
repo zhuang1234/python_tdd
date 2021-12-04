@@ -19,12 +19,13 @@ def home_page(request):
     return render(request, 'home.html', {'form': ItemForm()})
 
 def view_list(request, list_id):
+    """
     list_ = List.objects.get(id = list_id)
     error = None
-    """7.12.4
-    items = Item.objects.filter(list = list_)
-    return render(request, 'list.html', {'items': items})
-    """
+    # 7.12.4
+    # items = Item.objects.filter(list = list_)
+    # return render(request, 'list.html', {'items': items})
+
     if request.method == 'POST':
         try:
             item = Item.objects.create(text=request.POST['text'], list=list_)
@@ -41,9 +42,22 @@ def view_list(request, list_id):
             item.delete()
             print(List.objects.count(), Item.objects.count())
             error = "You can't have an empty list item"
-    return render(request, 'list.html', {'list': list_,'error': error})
+    form = ItemForm()
+    return render(request, 'list.html', {
+        'list': list_,"form": form, 'error': error
+    })
+    """
+    list_ = List.objects.get(id=list_id)
+    form = ItemForm()
+    if request.method == 'POST':
+        form = ItemForm(data=request.POST)
+        if form.is_valid():
+            Item.objects.create(text=request.POST['text'], list=list_)
+            return redirect(list_)
+    return render(request, 'list.html', {'list': list_, "form": form})
 
 def new_list(request):
+    """
     list_ = List.objects.create()
     item  = Item.objects.create(text = request.POST['text'], list=list_)
     try:
@@ -57,4 +71,14 @@ def new_list(request):
     # return redirect('view_list', list_.id)
     ## 只需把重定向的目标对象传给redirect函数即可redirect函数会自动调用get_absolute_url函数
     return redirect(list_)
-
+    """
+    ## 把 request.POST 中的数据传给表单的构造方法
+    form = ItemForm(data=request.POST)
+    ##  使用 form.is_valid() 判断提交是否成功
+    if form.is_valid():
+        list_ = List.objects.create()
+        Item.objects.create(text=request.POST['text'], list=list_)
+        return redirect(list_)
+    else:
+        ## 如果提交失败把表单对象传入模板而不显示一个硬编码的错误消息字符串
+        return render(request, 'home.html', {"form": form})

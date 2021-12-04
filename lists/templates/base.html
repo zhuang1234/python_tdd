@@ -20,9 +20,11 @@
                             {{ form.text }}
                             <!--{ form.text } 只会渲染这个表单中的 text 字段生成 HTML input 元素-->
                             {% csrf_token %}
-                            {% if error %}
+                        <!--form.errors 是一个列表包含这个表单中的所有错误-->
+                            {% if form.errors %}
                                 <div class="form-group has-error">
-                                  <span class="help-block">{{ error }}</span>
+                                  <!-- form.text.errors 也是一个列表但只包含 text 字段的错误-->
+                                  <span class="help-block">{{ form.text.errors }}</span>
                                  </div>
                             {% endif %}
                         </form>
