@@ -27,7 +27,7 @@ def view_list(request, list_id):
     """
     if request.method == 'POST':
         try:
-            item = Item.objects.create(text=request.POST['item_text'], list=list_)
+            item = Item.objects.create(text=request.POST['text'], list=list_)
             # print(f"item.text == {item.text}")
             # print(List.objects.count(),Item.objects.count())
             item.full_clean()
@@ -45,7 +45,7 @@ def view_list(request, list_id):
 
 def new_list(request):
     list_ = List.objects.create()
-    item  = Item.objects.create(text = request.POST['item_text'], list=list_)
+    item  = Item.objects.create(text = request.POST['text'], list=list_)
     try:
         item.full_clean()
         item.save()
