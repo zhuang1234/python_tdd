@@ -52,10 +52,11 @@ def view_list(request, list_id):
     if request.method == 'POST':
         form = ItemForm(data=request.POST)
         if form.is_valid():
-            Item.objects.create(text=request.POST['text'], list=list_)
+            # Item.objects.create(text=request.POST['text'], list=list_)
+            form.save(for_list=list_)
             return redirect(list_)
     return render(request, 'list.html', {'list': list_, "form": form})
-
+## 从用户的请求中读取数据结合一些定制的逻辑或 URL 中的信息 list_id 然后把数据传入表单进行验证如果通过验证就保存数据最后重定向或者渲染模板
 def new_list(request):
     """
     list_ = List.objects.create()
@@ -77,7 +78,8 @@ def new_list(request):
     ##  使用 form.is_valid() 判断提交是否成功
     if form.is_valid():
         list_ = List.objects.create()
-        Item.objects.create(text=request.POST['text'], list=list_)
+        # Item.objects.create(text=request.POST['text'], list=list_)
+        form.save(for_list=list_)
         return redirect(list_)
     else:
         ## 如果提交失败把表单对象传入模板而不显示一个硬编码的错误消息字符串

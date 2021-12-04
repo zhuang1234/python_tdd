@@ -16,6 +16,12 @@ class ItemForm(forms.models.ModelForm):
         error_messages = {
             'text': {'required': EMPTY_ITEM_ERROR}
     }
+
+    def save(self, for_list):
+        ## 表单的 .instance 属性是将要修改或创建的数据库对象
+        self.instance.list = for_list
+        return super().save()
+
 """
 class ItemForm(forms.Form):
     item_text = forms.CharField(
