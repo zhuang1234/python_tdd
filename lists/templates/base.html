@@ -14,9 +14,11 @@
                     <div class="text-center">
                         <h1>{% block header_text %}{% endblock %}</h1>
                         <form method="POST" action="{% block form_action %}{% endblock %}">
-                            <input name="item_text" id="id_new_item"
+                            <!--input name="item_text" id="id_new_item"
                                    class="form-control input-lg"
-                                   placeholder="Enter a to-do item" />
+                                   placeholder="Enter a to-do item" /-->
+                            {{ form.text }}
+                            <!--{ form.text } 只会渲染这个表单中的 text 字段生成 HTML input 元素-->
                             {% csrf_token %}
                             {% if error %}
                                 <div class="form-group has-error">

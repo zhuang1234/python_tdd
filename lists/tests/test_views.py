@@ -5,7 +5,7 @@ from django.template.loader import render_to_string
 from django.utils.html import escape
 
 from lists.models import Item,List
-
+from lists.forms import ItemForm
 from lists.views import home_page, new_list
 
 
@@ -54,7 +54,10 @@ class HomePageTest(TestCase):
         self.assertIn('itemey 1', response.content.decode())
         self.assertIn('itemey 2', response.content.decode())
     """
-
+    def test_home_page_uses_item_form(self):
+        response = self.client.get('/')
+        ## assertIsInstance 检查表单是否属于正确的类
+        self.assertIsInstance(response.context['form'], ItemForm)
 
 class ListViewTest(TestCase):
 

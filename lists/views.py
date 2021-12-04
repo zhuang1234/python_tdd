@@ -1,6 +1,7 @@
 from django.core.exceptions import ValidationError
 from django.shortcuts import render,redirect
 from lists.models import Item,List
+from lists.forms import ItemForm
 from django.http import HttpResponse
 
 # Create your views here.
@@ -14,7 +15,8 @@ def home_page(request):
     #items = Item.objects.all()
     # render第一个参数是请求对象、第二个参数是渲染的模板名、函数的第三个参数是一个字典把模板变量的名称映射在值上
     # return render(request, 'home.html', {'items': items})
-    return render(request, 'home.html')
+    # return render(request, 'home.html')
+    return render(request, 'home.html', {'form': ItemForm()})
 
 def view_list(request, list_id):
     list_ = List.objects.get(id = list_id)
