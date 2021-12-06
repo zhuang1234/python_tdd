@@ -38,5 +38,12 @@
                 </div>
             </div>
         </div>
+        <!--在 HTML 的 body 元素末尾引入脚本这样的话用户无须等到所有 JavaScript 都加载完就能看到页面中的内容。此外还能保证运行脚本前加载了大部分 DOM-->
+        <script src="/static/jquery-3.6.0.min.js"></script>
+        <script src="/static/list.js"></script>
+
+        <script>
+            initialize();
+        </script>
     </body>
 </html>

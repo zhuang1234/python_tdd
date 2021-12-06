@@ -1,8 +1,9 @@
 from django.core.exceptions import ValidationError
 from django.shortcuts import render,redirect
 from lists.models import Item,List
-from lists.forms import ItemForm
+# from lists.forms import ItemForm
 from django.http import HttpResponse
+from lists.forms import ExistingListItemForm, ItemForm
 
 # Create your views here.
 def home_page(request):
@@ -48,12 +49,12 @@ def view_list(request, list_id):
     })
     """
     list_ = List.objects.get(id=list_id)
-    form = ItemForm()
+    form = ExistingListItemForm(for_list=list_)
     if request.method == 'POST':
-        form = ItemForm(data=request.POST)
+        form = ExistingListItemForm(for_list=list_, data=request.POST)
         if form.is_valid():
             # Item.objects.create(text=request.POST['text'], list=list_)
-            form.save(for_list=list_)
+            form.save()
             return redirect(list_)
     return render(request, 'list.html', {'list': list_, "form": form})
 ## 从用户的请求中读取数据结合一些定制的逻辑或 URL 中的信息 list_id 然后把数据传入表单进行验证如果通过验证就保存数据最后重定向或者渲染模板

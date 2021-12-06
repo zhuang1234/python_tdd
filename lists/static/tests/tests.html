@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<title>Test Suite</title>
+<link rel="stylesheet" href="https://code.jquery.com/qunit/qunit-2.17.2.css">
+<body>
+  <div id="qunit"></div>
+  <div id="qunit-fixture">
+    <form>
+        <input name="text" />
+            <div class="has-error">Error text</div>
+    </form>
+  </div>
+  <!--script src="https://code.jquery.com/qunit/qunit-2.17.2.js"></script-->
+<script src="../jquery-3.6.0.min.js"></script>
+<script src="qunit.js"></script>
+<script src="../list.js"></script>
+
+</body>
+<script>
+  function add(a, b) {
+    return a + b;
+  }
+
+  QUnit.module('add', function() {
+    QUnit.test('two numbers', function(assert) {
+      assert.equal(add(1, 2), 3);
+    });
+  });
+</script>
+
+<script>
+QUnit.test("smoke test", function (assert) {
+    assert.equal($('.has-error').is(':visible'), true);
+    $('.has-error').hide();
+    assert.equal($('.has-error').is(':visible'), false);
+});
+QUnit.test("smoke test 2", function (assert) {
+    assert.equal($('.has-error').is(':visible'), true);
+    $('.has-error').hide();
+    assert.equal($('.has-error').is(':visible'), false);
+});
+
+</script>
+
+<script>
+<!--jQuery 提供的 .trigger 方法主要用于测试作用是在指定的元素上触发一个 JavaScript DOM 事件。这里使用的是 keypress 事件当用户在指定的输入框中输入内容时浏览器就会触发这个事件-->
+QUnit.test("errors should be hidden on keypress", function (assert) {
+    console.log('in test 1');
+    initialize();
+    $('input[name="text"]').trigger('keypress');
+    assert.equal($('.has-error').is(':visible'), false);
+});
+
+QUnit.test("errors aren't hidden if there is no keypress", function (assert) {
+    console.log('in test 2');
+    initialize();
+    assert.equal($('.has-error').is(':visible'), true);
+});
+</script>
