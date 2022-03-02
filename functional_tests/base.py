@@ -8,6 +8,8 @@ from unittest import skip
 import os
 
 MAX_WAIT = 10
+
+
 # import unittest
 class FunctionalTest(StaticLiveServerTestCase):
     def setUp(self):
