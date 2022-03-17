@@ -18,6 +18,7 @@ class FunctionalTest(StaticLiveServerTestCase):
         staging_server = os.environ.get('STAGING_SERVER')
         if staging_server:
             self.live_server_url = 'http://' + staging_server
+            print(f'live_server_url  is {self.live_server_url}')
 
     def tearDown(self) -> None:
         self.browser.quit()

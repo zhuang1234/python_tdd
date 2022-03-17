@@ -8,8 +8,9 @@ from unittest import skip
 from selenium.common.exceptions import WebDriverException
 from .base import FunctionalTest
 
-
 MAX_WAIT = 10
+
+
 # import unittest
 
 class LayoutAndStylingTest(FunctionalTest):
@@ -26,5 +27,3 @@ class LayoutAndStylingTest(FunctionalTest):
             512,
             delta=10
         )
-
-

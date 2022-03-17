@@ -9,6 +9,8 @@ from selenium.common.exceptions import WebDriverException
 from .base import FunctionalTest
 
 MAX_WAIT = 10
+
+
 # import unittest
 
 class ItemValidationTest(FunctionalTest):
@@ -101,7 +103,7 @@ class ItemValidationTest(FunctionalTest):
         ))
 
     def test_error_messages_are_cleared_on_input(self):
-         # 伊迪丝新建一个清单但方法不当所以出现了一个验证错误
+        # 伊迪丝新建一个清单但方法不当所以出现了一个验证错误
         self.browser.get(self.live_server_url)
         self.get_item_input_box().send_keys('Banter too thick')
         self.get_item_input_box().send_keys(Keys.ENTER)
@@ -113,10 +115,10 @@ class ItemValidationTest(FunctionalTest):
             self.get_error_element().is_displayed()
         ))
 
-         # 为了消除错误她开始在输入框中输入内容
+        # 为了消除错误她开始在输入框中输入内容
         self.get_item_input_box().send_keys('a')
 
-         # 看到错误消息消失了她很高兴
+        # 看到错误消息消失了她很高兴
         self.wait_for(lambda: self.assertFalse(
             self.get_error_element().is_displayed()
         ))

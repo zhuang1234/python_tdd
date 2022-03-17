@@ -9,6 +9,8 @@ from selenium.common.exceptions import WebDriverException
 from .base import FunctionalTest
 
 MAX_WAIT = 10
+
+
 # import unittest
 
 # class NewVisitorTest(unittest.TestCase):

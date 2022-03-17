@@ -6,13 +6,14 @@ from django.http import HttpRequest, response
 from django.template.loader import render_to_string
 from django.utils.html import escape
 
-from lists.models import Item,List
-from lists.forms import ItemForm,EMPTY_ITEM_ERROR
+from lists.models import Item, List
+from lists.forms import ItemForm, EMPTY_ITEM_ERROR
 from lists.views import home_page, new_list
 from lists.forms import (
     DUPLICATE_ITEM_ERROR, EMPTY_ITEM_ERROR,
     ExistingListItemForm, ItemForm,
 )
+
 
 # Create your tests here.
 class HomePageTest(TestCase):
@@ -21,13 +22,14 @@ class HomePageTest(TestCase):
         found = resolve('/')
         self.assertEqual(found.func, home_page)
     """
+
     def test_home_page_returns_correct_html(self):
         '''
         request = HttpRequest()
         response = home_page(request)
         '''
         response = self.client.get('/')
-        html =response.content.decode('utf8')
+        html = response.content.decode('utf8')
 
         if False:
             expected_html = render_to_string('home.html')
@@ -40,9 +42,8 @@ class HomePageTest(TestCase):
             self.assertTemplateUsed(response, 'home.html')
 
     def test_uses_home_template(self):
-        response =self.client.get('/')
+        response = self.client.get('/')
         self.assertTemplateUsed(response, 'home.html')
-
 
     """7.8.3删除多余测试
     def test_only_saves_items_when_necessary(self):
@@ -59,10 +60,12 @@ class HomePageTest(TestCase):
         self.assertIn('itemey 1', response.content.decode())
         self.assertIn('itemey 2', response.content.decode())
     """
+
     def test_home_page_uses_item_form(self):
         response = self.client.get('/')
         ## assertIsInstance 检查表单是否属于正确的类
         self.assertIsInstance(response.context['form'], ItemForm)
+
 
 class ListViewTest(TestCase):
 
@@ -74,11 +77,11 @@ class ListViewTest(TestCase):
     # def test_displays_all_items(self):
     def test_displays_only_items_for_that_list(self):
         correct_list = List.objects.create()
-        Item.objects.create(text = 'itemey 1', list=correct_list)
-        Item.objects.create(text = 'itemey 2', list=correct_list)
+        Item.objects.create(text='itemey 1', list=correct_list)
+        Item.objects.create(text='itemey 2', list=correct_list)
         other_list = List.objects.create()
-        Item.objects.create(text = 'itemey 1', list=other_list)
-        Item.objects.create(text = 'itemey 2', list=other_list)
+        Item.objects.create(text='itemey 1', list=other_list)
+        Item.objects.create(text='itemey 2', list=other_list)
 
         response = self.client.get(f'/lists/{correct_list.id}/')
 
@@ -112,7 +115,6 @@ class ListViewTest(TestCase):
         self.assertEqual(new_item.text, 'A new item for an existing list')
         self.assertEqual(new_item.list, correct_list)
 
-
     def test_POST_redirects_to_list_view(self):
         other_list = List.objects.create()
         correct_list = List.objects.create()
@@ -123,6 +125,7 @@ class ListViewTest(TestCase):
         )
 
         self.assertRedirects(response, f'/lists/{correct_list.id}/')
+
     """
     def test_validation_errors_end_up_on_lists_page(self):
         list_ = List.objects.create()
@@ -135,11 +138,12 @@ class ListViewTest(TestCase):
         expected_error = escape("You can't have an empty list item")
         self.assertContains(response, expected_error)
     """
+
     def post_invalid_input(self):
         list_ = List.objects.create()
         return self.client.post(
             f'/lists/{list_.id}/',
-            data = {'text': ''}
+            data={'text': ''}
         )
 
     def test_displays_item_form(self):
@@ -166,13 +170,13 @@ class ListViewTest(TestCase):
         response = self.post_invalid_input()
         self.assertContains(response, escape(EMPTY_ITEM_ERROR))
 
-    #@skip
+    # @skip
     def test_duplicate_item_validation_errors_end_up_on_lists_page(self):
         list1 = List.objects.create()
         item1 = Item.objects.create(list=list1, text='textey')
         response = self.client.post(
             f'/lists/{list1.id}/',
-            data = {'text': 'textey'}
+            data={'text': 'textey'}
         )
 
         # expected_error = escape("You've already got this in your list")
@@ -200,11 +204,12 @@ class ListViewTest(TestCase):
         self.assertIsInstance(response.context['form'], ItemForm)
         self.assertContains(response, 'name="text"')
 
+
 class NewListTest(TestCase):
 
     def test_can_save_a_POST_request(self):
         # 修改针对保存 POST 请求数据的单元测试不让它渲染包含待办事项的响应而是重定向到首页
-        self.client.post('/lists/new',data={'text':'A new list item'})
+        self.client.post('/lists/new', data={'text': 'A new list item'})
         self.assertEqual(Item.objects.count(), 1)
         new_item = Item.objects.first()
         self.assertEqual(new_item.text, 'A new list item')
@@ -216,6 +221,7 @@ class NewListTest(TestCase):
         self.assertEqual(response.status_code, 302)
         self.assertEqual(response['location'], '/lists/the-only-list-in-the-world/')
     """
+
     def test_redirects_after_POST(self):
         response = self.client.post('/lists/new', data={'text': 'A new list item'})
         new_list = List.objects.first()
@@ -235,4 +241,3 @@ class NewListTest(TestCase):
         self.client.post('/lists/new', data={'text': ''})
         self.assertEqual(List.objects.count(), 0)
         self.assertEqual(Item.objects.count(), 0)
-
